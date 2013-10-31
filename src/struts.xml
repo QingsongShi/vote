@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<!-- Development Mode -->
+	<constant name="struts.devMode" value="true" />
+	
+	<!--404处理-->
+	<package name="default" extends="struts-default">
+		<default-action-ref name="404"></default-action-ref>
+		<action name="404">
+			<result>/404.jsp</result>
+		</action>
+	</package>
+	
+	<!-- 首页 -->
+	<package name="front" extends="struts-default" namespace="/">
+		<action name="adminLoginInput">
+			<result>/admin_login.jsp</result>
+		</action>
+		<action name="userLoginInput" class="userLoginInputAction">
+			<result>/user_login.jsp</result>
+		</action>
+		<action name="adminLogin" class="adminLoginAction">
+			<result type="redirectAction">
+				<param name="actionName">index</param>
+            	<param name="namespace">/a</param>
+			</result>
+			<result name="input">/admin_login.jsp</result>
+		</action>
+		<action name="adminLogout" class="adminLogoutAction">
+			<result>/admin_logout.jsp</result>
+		</action>
+		<action name="userLogin" class="userLoginAction">
+			<result type="redirectAction">
+				<param name="actionName">index</param>
+            	<param name="namespace">/u</param>
+			</result>
+			<result name="input">/user_login.jsp</result>
+		</action>
+		
+	</package>
+	
+	<!-- 用户 -->
+	<package name="user" extends="struts-default" namespace="/u">
+	
+		<action name="index" class="userPermitDeptAction" method="getPermitDeptList">
+			<result>/user/index.jsp</result>
+		</action>
+		
+		<action name="permitDeptNameList" class="userPermitDeptAction" method="getPermitDeptNamePM">
+			<result>/user/dept_names.jsp</result>
+			<result name="error" type="redirectAction">index</result>
+			<result name="input" type="redirectAction">index</result>
+		</action>
+		<action name="showBallot" class="userBallotAction">
+			<result>/user/poll.jsp</result>
+			<result name="error" type="redirectAction">index</result>
+		</action>
+		<action name="addBallot" class="userBallotAction" method="addBallot">
+			<result type="redirectAction">permitDeptNameList?deptId=${deptId}&amp;pager.offset=${pager.offset}</result>
+			<result name="error">/user/error/addBallotError.jsp</result>
+		</action>
+	</package>
+	
+	
+	<!-- 管理员 -->
+	<package name="admin" extends="struts-default" namespace="/a">
+		<action name="index">
+			<result>/admin/index.jsp</result>
+		</action>
+		<action name="showSystemInfo" class="adminSystemAction" method="getVoteSystemConfig">
+			<result>/admin/index_top.jsp</result>
+		</action>
+		<action name="getSystemInfo" class="adminSystemAction" method="getVoteSystemConfig">
+			<result>/admin/system_info.jsp</result>
+		</action>
+		<action name="updateSystemInfo" class="adminSystemAction" method="updateVoteSystemConfig">
+			<result>/admin/success/updateSystemInfoSuccess.jsp</result>
+		</action>
+		<action name="showDeptInfo" class="adminDeptAction" method="getDeptList">
+			<result>/admin/dept_main.jsp</result>
+		</action>
+		<action name="deleteDeptById" class="adminDeptAction" method="deleteDeptById">
+			<result type="redirectAction">showDeptInfo</result>
+			<result name="error">/admin/error/deleteDeptByIdError.jsp</result>
+		</action>
+		<action name="deptAddInput" class="adminDeptAction">
+			<result>/admin/dept_add.jsp</result>
+		</action>
+		<action name="deptAdd" class="adminDeptAction" method="addDept">
+			<result type="redirectAction">deptAddInput</result>
+		</action>
+		<action name="showUserInfo" class="adminUserAction" method="getUserList">
+			<result>/admin/user_main.jsp</result>
+		</action>
+		<!-- 添加用户输入页面 -->
+		<action name="userAddInput" class="adminUserAction" method="addUserInput">
+			<result>/admin/user_add.jsp</result>
+		</action>
+		<action name="deleteUserById" class="adminUserAction" method="deleteUserById">
+			<result type="redirectAction">showUserInfo</result>
+			<result name="error">/admin/error/deleteUserByIdError.jsp</result>
+		</action>
+		<action name="userUpdateInput" class="adminUserAction" method="updateUserInput">
+			<result>/admin/user_update.jsp</result>
+		</action>
+		<action name="updateUser" class="adminUserAction" method="updateUser">
+			<result type="redirectAction">showUserInfo</result>
+		</action>
+		<action name="addUser" class="adminUserAction" method="addUser">
+			<result type="redirectAction">showUserInfo</result>
+		</action>
+		<!-- 用户信息导出 -->
+		<action name="userInfoExport" class="adminUserAction" method="exportUserInfoToExcel">
+			<result type="stream">
+				<param name="contentType">application/vnd.ms-excel</param> 
+				<param name="inputName">inputStream</param> 
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>  
+				<param name="bufferSize">4096</param>  
+				
+			</result>
+		</action>
+	</package>
+</struts>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
