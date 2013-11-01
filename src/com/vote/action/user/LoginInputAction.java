@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.vote.domain.VoteSystem;
 import com.vote.service.UserService;
 /**
  * 用户登录时检查系统的登录状态
@@ -22,7 +21,7 @@ public class LoginInputAction extends ActionSupport {
 	
 	@Override
 	public String execute() throws Exception {
-		if(!userService.getAllowLogin()) {
+		if(userService.getVoteSystem().getAllowLogin()==0) {
 			//forbid login
 			this.forbidLoginMessage = "投票工作已完成，现在系统禁止用户登录";
 		}

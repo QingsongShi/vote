@@ -36,25 +36,28 @@ public class BallotAction extends ActionSupport implements SessionAware {
 	 */
 	@Override
 	public String execute() throws Exception {
-		Voter user = (Voter)session.get("onlineUser");
-		Voter voter = userService.loadUser(user.getId());
-		votee = userService.loadUser(userId);
-		// 权限进行检查
-		Set<Dept> permitDeptSet = voter.getDeptSet();
-		boolean result = false;
-		Iterator<Dept> it = permitDeptSet.iterator();
-		while(it.hasNext()) {
-			Dept permitDept = it.next();
-			if(permitDept.getId() == votee.getDept().getId()) {
-				result = true;
-				break;
-			}
-		}
-		if(result) {
-			return SUCCESS;
-		} else {
-			return ERROR;
-		}
+//		Voter user = (Voter)session.get("onlineUser");
+//		Voter voter = userService.loadUser(user.getId());
+//		votee = userService.loadUser(userId);
+//		// 权限进行检查
+//		Set<Dept> permitDeptSet = voter.getDeptSet();
+//		boolean result = false;
+//		Iterator<Dept> it = permitDeptSet.iterator();
+//		while(it.hasNext()) {
+//			Dept permitDept = it.next();
+//			if(permitDept.getId() == votee.getDept().getId()) {
+//				result = true;
+//				break;
+//			}
+//		}
+//		if(result) {
+//			return SUCCESS;
+//		} else {
+//			return ERROR;
+//		}
+		
+		
+		return SUCCESS;
 		
 	}
 	/**
@@ -62,18 +65,18 @@ public class BallotAction extends ActionSupport implements SessionAware {
 	 * @return
 	 */
 	public String addBallot() {
-		Log log = new Log();
-		log.setVoter((Voter)session.get("onlineUser"));
-		log.setVotee(ballot.getVotee());
-		log.setCreateTime(new Date());
-		boolean result = userService.addBallot(ballot, log);
-		if(result) {
-			return SUCCESS;
-		}else {
-			return ERROR;
-		}
+//		Log log = new Log();
+//		log.setVoter((Voter)session.get("onlineUser"));
+//		log.setVotee(ballot.getVotee());
+//		log.setCreateTime(new Date());
+//		boolean result = userService.addBallot(ballot, log);
+//		if(result) {
+//			return SUCCESS;
+//		}else {
+//			return ERROR;
+//		}
 		
-
+		return SUCCESS;
 	}
 
 	public UserService getUserService() {

@@ -32,7 +32,7 @@ public class LoginAction extends ActionSupport implements SessionAware {
 	public String execute() throws Exception {
 		
 		int systemYear = userService.getVoteSystem().getSystemYear();
-		if(userService.getAllowLogin()) {
+		if(userService.getVoteSystem().getAllowLogin()==1) {
 			//System allow user login
 			Voter user = userService.validateUserLogin(account, password);
 			

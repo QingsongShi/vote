@@ -24,7 +24,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-  <s:iterator value="onlineUser.deptSet" var="dept">
+  <s:iterator value="onlineUser.permitDeptSet" var="dept">
   	<a href="u/permitDeptNameList?deptId=<s:property value='#dept.id'/>"><s:property value="#dept.deptName"/></a> <p>
   </s:iterator>
   <s:debug></s:debug>

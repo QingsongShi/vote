@@ -1,7 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
-  <display-name></display-name>
-  <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
-  </welcome-file-list>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	<display-name></display-name>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	<context-param>
+		<param-name>pageSize</param-name>
+		<param-value>10</param-value>
+	</context-param>
+	<context-param>
+		<param-name>maxIndexPages</param-name>
+		<param-value>5</param-value>
+	</context-param>
+	<filter>
+		<filter-name>validateOnlineUserFilter</filter-name>
+		<filter-class>com.vote.filter.ValidateOnlineUserFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>validateOnlineUserFilter</filter-name>
+		<url-pattern>/user/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>validateOnlineUserFilter</filter-name>
+		<url-pattern>/u/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>validateOnlineAdminFilter</filter-name>
+		<filter-class>com.vote.filter.ValidateOnlineAdminFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>validateOnlineAdminFilter</filter-name>
+		<url-pattern>/admin/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>validateOnlineAdminFilter</filter-name>
+		<url-pattern>/a/*</url-pattern>
+	</filter-mapping>
+
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+
+	<filter>
+		<filter-name>openSessionInView</filter-name>
+		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+		<init-param>
+			<param-name>sessionFactoryBeanName</param-name>
+			<param-value>sessionFactory</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>openSessionInView</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
+	<filter>
+		<filter-name>struts2</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 </web-app>

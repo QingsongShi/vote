@@ -32,15 +32,15 @@ public class PermitDeptAction extends ActionSupport implements SessionAware {
 	private UserService userService;
 	private Pager pager;	
 	private int deptId;
-	private List<Log> logList;
+	private Set<Log> logSet;
 	/**
 	 * 获得部门内部投票名单
 	 * @return
 	 */
 	public String getPermitDeptNamePM() {
 		onlineUser = (Voter)this.session.get("onlineUser");
-		Voter voter = userService.loadUser(onlineUser.getId());
-		Set<Dept> permitDepts = voter.getDeptSet();
+		Voter voter = userService.getVoterById(onlineUser.getId());
+		Set<Dept> permitDepts = voter.getPermitDeptSet();
 		Iterator<Dept> it = permitDepts.iterator();
 		// 判断该用户是否具有投票权限
 		boolean result = false;
@@ -54,7 +54,7 @@ public class PermitDeptAction extends ActionSupport implements SessionAware {
 		if(result) {
 			// 具有投票权限
 			userPM = userService.getPermitDeptNamePM(this.getPager().getOffset(), this.getPageSize(), deptId);
-			logList = userService.getLogListByVoterId(onlineUser.getId());
+			logSet = voter.getLogSet();
 			return SUCCESS;
 		}else {
 			// 没有投票权限
@@ -62,11 +62,13 @@ public class PermitDeptAction extends ActionSupport implements SessionAware {
 		}
 		
 	}
-	
+	/**
+	 * 获得具有投票权限的部门名称
+	 * @return
+	 */
 	public String getPermitDeptList() {
 		onlineUser = (Voter)this.session.get("onlineUser");
-		onlineUser = userService.loadUser(onlineUser.getId());
-		
+		onlineUser = userService.getVoterById(onlineUser.getId());
 		return SUCCESS;
 	}
 	@Resource(name="userService")
@@ -114,8 +116,8 @@ public class PermitDeptAction extends ActionSupport implements SessionAware {
 		this.userPM = userPM;
 	}
 
-	public List<Log> getLogList() {
-		return logList;
+	public Set<Log> getLogSet() {
+		return logSet;
 	}
 	
 }

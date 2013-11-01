@@ -27,6 +27,7 @@ public class Voter {
 	private String password;
 	private Dept dept;
 	private Set<Dept> permitDeptSet = new HashSet<Dept>();
+	private Set<Log> logSet = new HashSet<Log>();
 	@Id
 	@GeneratedValue
 	public int getId() {
@@ -91,4 +92,13 @@ public class Voter {
 	public void setPermitDeptSet(Set<Dept> permitDeptSet) {
 		this.permitDeptSet = permitDeptSet;
 	}
+	@OneToMany(mappedBy="voter",fetch=FetchType.LAZY)
+	public Set<Log> getLogSet() {
+		return logSet;
+	}
+	
+	public void setLogSet(Set<Log> logSet) {
+		this.logSet = logSet;
+	}
+	
 }

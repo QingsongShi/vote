@@ -32,9 +32,9 @@ import com.vote.util.GenerateAccountOrPassword;
 public class AdminService {
 
 	private AdminDao adminDao;
-	private VoteSystemDao systemDao;
+	private VoteSystemDao voteSystemDao;
 	private DeptDao deptDao;
-	private VoterDao userDao;
+	private VoterDao voterDao;
 	
 	/**
 	 * 验证管理员登陆
@@ -55,16 +55,16 @@ public class AdminService {
 	 * 得到系统的信息
 	 * @return
 	 */
-	public VoteSystem getVoteSystemConfig() {
-		return systemDao.getVoteSystemConfig();
+	public VoteSystem getVoteSystem() {
+		return voteSystemDao.getVoteSystem();
 	}
 	
 	/**
 	 * 修改系统信息
 	 * @param vSystem
 	 */
-	public void updateVoteSystemConfig(VoteSystem vSystem) {
-		systemDao.updateVoteSystemConfig(vSystem);
+	public void updateVoteSystem(VoteSystem voteSystem) {
+		voteSystemDao.updateVoteSystem(voteSystem);
 	}
 	/**
 	 * 获得部门信息的分页模型
@@ -74,11 +74,11 @@ public class AdminService {
 	 */
 	public PageModel<Dept> getDeptList(int offset,int pageSize) {
 		PageModel<Dept> deptPM = new PageModel<Dept>();
-		int systemYear = this.getVoteSystemConfig().getYear();
-		List<Dept> deptList = deptDao.getDeptList(offset, pageSize, systemYear);
+		int systemYear = this.getVoteSystem().getSystemYear();
+		List<Dept> deptList = deptDao.getDeptListBySystemYear(offset, pageSize, systemYear);
 		deptPM.setList(deptList);
 		deptPM.setPageSize(pageSize);
-		deptPM.setTotalRecords(deptDao.countOfDeptList(systemYear));
+		deptPM.setTotalRecords(deptDao.countOfDeptByYear(systemYear));
 		return deptPM;
 	}
 	/**
@@ -109,7 +109,7 @@ public class AdminService {
 	 */
 	public void addDept(String deptName) {
 		Dept dept = new Dept();
-		dept.setYear(systemDao.getVoteSystemConfig().getYear());
+		dept.setYear(voteSystemDao.getVoteSystem().getSystemYear());
 		dept.setDeptName(deptName);
 		deptDao.addDept(dept);
 	}
@@ -120,21 +120,21 @@ public class AdminService {
 	 * @return
 	 */
 	public PageModel<Voter> getUserPMByYear(int offset,int pageSize) {
-		PageModel<Voter> userPM = new PageModel<Voter>();
-		int systemYear = systemDao.getVoteSystemConfig().getYear();
-		userPM.setList(userDao.getUserList(offset, pageSize, systemYear));
-		userPM.setPageSize(pageSize);
-		userPM.setTotalRecords(userDao.countOfUserList(systemYear));
-		return userPM;
+		PageModel<Voter> voterPM = new PageModel<Voter>();
+		int systemYear = voteSystemDao.getVoteSystem().getSystemYear();
+		voterPM.setList(voterDao.getVoterListBySystemYear(offset, pageSize, systemYear));
+		voterPM.setPageSize(pageSize);
+		voterPM.setTotalRecords(voterDao.countOfVoterListBySystemYear(systemYear));
+		return voterPM;
 	}
 	/**
 	 * 根据id删除用户
 	 * @param userId
 	 * @return
 	 */
-	public boolean deleteUserById(int userId) {
+	public boolean deleteUserById(int voterId) {
 		try {
-			userDao.deleteUserById(userId);
+			voterDao.deleteVoterById(voterId);
 		} catch(Exception e) {
 			return false;
 		}
@@ -145,17 +145,17 @@ public class AdminService {
 	 * @param userId
 	 * @return
 	 */
-	public Voter loadUser(int userId) {
-		Voter user = userDao.loadUser(userId);
-		return user;
+	public Voter getVoterById(int voterId) {
+		Voter voter = voterDao.getVoterById(voterId);
+		return voter;
 	}
 	/**
 	 * 根据系统年份获得部门列表
 	 * @param systemYear
 	 * @return
 	 */
-	public List<Dept> getAllDeptBySystemtYear(int systemYear) {
-		return deptDao.getAllDeptBySystemtYear(systemYear);
+	public List<Dept> getDeptListBySystemYear(int systemYear) {
+		return deptDao.getDeptListBySystemYear(systemYear);
 	}
 	/**
 	 * 修改用户
@@ -180,9 +180,9 @@ public class AdminService {
 //			permitDeptSet.add(permitDept);
 			permitDeptSet.add(deptDao.getDeptById(permitDeptIds[i]));
 		}
-		user.setDeptSet(permitDeptSet);
-		userDao.updateUser(user);
-		
+//		user.setDeptSet(permitDeptSet);
+//		userDao.updateUser(user);
+//		
 	}
 	/**
 	 * 添加用户
@@ -206,25 +206,25 @@ public class AdminService {
 			u.setPassword(saveOrUpdateUserDto.getPassword());
 		}
 		// 第二步：判断账号是否重复
-		if(userDao.getUserByAccount(u.getAccount()) != null) {
-			return false;
-		}
+//		if(userDao.getUserByAccount(u.getAccount()) != null) {
+//			return false;
+//		}
 	
 		
 		
-		// 第三步：设值，添加用户
-		u.setYear(systemDao.getVoteSystemConfig().getYear());
-		Dept dept = new Dept();
-		dept.setId(saveOrUpdateUserDto.getDeptId());
-		u.setDept(dept);
-		int[] permitDeptIds = saveOrUpdateUserDto.getPermitDeptIds();
-		Set<Dept> permitDeptSet = new HashSet<Dept>();
-		for(int i=0; i<permitDeptIds.length; i++) {
-			permitDeptSet.add(deptDao.getDeptById(permitDeptIds[i]));
-		}
-		u.setDeptSet(permitDeptSet);
-		
-		userDao.addUser(u);
+//		// 第三步：设值，添加用户
+//		u.setYear(systemDao.getVoteSystemConfig().getYear());
+//		Dept dept = new Dept();
+//		dept.setId(saveOrUpdateUserDto.getDeptId());
+//		u.setDept(dept);
+//		int[] permitDeptIds = saveOrUpdateUserDto.getPermitDeptIds();
+//		Set<Dept> permitDeptSet = new HashSet<Dept>();
+//		for(int i=0; i<permitDeptIds.length; i++) {
+//			permitDeptSet.add(deptDao.getDeptById(permitDeptIds[i]));
+//		}
+//		u.setDeptSet(permitDeptSet);
+//		
+//		userDao.addUser(u);
 		return true;
 	}
 	/**
@@ -233,8 +233,8 @@ public class AdminService {
 	 * @param userList
 	 */
 	public void userInfoToExcel(String path,String fileName) {
-		int systemYear = systemDao.getVoteSystemConfig().getYear();
-		List<Voter> userList = userDao.getUserListBySystemYear(systemYear);
+		int systemYear = voteSystemDao.getVoteSystem().getSystemYear();
+		List<Voter> voterList = voterDao.getVoterListBySystemYear(systemYear);
 		// 产生工作簿对象
 		HSSFWorkbook workBook = new HSSFWorkbook();
 		// 产生工作表对象
@@ -254,7 +254,7 @@ public class AdminService {
 		cell.setCellValue("部门");
 		
 		int rowNum = 1;
-		Iterator<Voter> it = userList.iterator();
+		Iterator<Voter> it = voterList.iterator();
 		while(it.hasNext()) {
 			Voter u = it.next();
 			// 创建一行
@@ -296,17 +296,18 @@ public class AdminService {
 	public void setAdminDao(AdminDao adminDao) {
 		this.adminDao = adminDao;
 	}
-	@Resource(name="systemDao")
-	public void setSystemDao(VoteSystemDao systemDao) {
-		this.systemDao = systemDao;
-	}
+	
 	@Resource(name="deptDao")
 	public void setDeptDao(DeptDao deptDao) {
 		this.deptDao = deptDao;
 	}
-	@Resource(name="userDao")
-	public void setUserDao(VoterDao userDao) {
-		this.userDao = userDao;
+	@Resource(name="voteSystemDao")
+	public void setVoteSystemDao(VoteSystemDao voteSystemDao) {
+		this.voteSystemDao = voteSystemDao;
+	}
+	@Resource(name="voterDao")
+	public void setVoterDao(VoterDao voterDao) {
+		this.voterDao = voterDao;
 	}
 	
 }
