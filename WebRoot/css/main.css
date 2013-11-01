@@ -1,0 +1,18 @@
+.solidTable{
+	font-size: 18px;
+	font-weight: 400;
+	border-collapse:collapse;
+	border-width: 1px;
+	BORDER-top: black 1px solid; 
+	BORDER-bottom: black 1px solid;
+	BORDER-left: black 1px solid; 
+	BORDER-right: black 1px solid; 
+}
+.solidTable td{
+	BORDER-top: black 1px solid; 
+	BORDER-bottom: black 1px solid;
+	BORDER-left: black 1px solid; 
+	BORDER-right: black 1px solid; 
+}
+
+	
