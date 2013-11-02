@@ -22,7 +22,15 @@ public class LogDao {
 		Session session =sf.getCurrentSession();
 		session.save(log);
 	}
-
+	
+	public List<Log> getLogList(int systemYear,int voterId) {
+		Session session =sf.getCurrentSession();
+		Query q = session.createQuery("from Log l where l.year = ? and l.voter.id = ?");
+		q.setInteger(0, systemYear);
+		q.setInteger(1, voterId);
+		return q.list();
+	}
+	
 	@Resource(name ="sessionFactory")
 	public void setSf(SessionFactory sf) {
 		this.sf = sf;

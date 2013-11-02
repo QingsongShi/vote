@@ -92,7 +92,7 @@ public class Voter {
 	public void setPermitDeptSet(Set<Dept> permitDeptSet) {
 		this.permitDeptSet = permitDeptSet;
 	}
-	@OneToMany(mappedBy="voter",fetch=FetchType.LAZY)
+	@OneToMany(fetch=FetchType.LAZY,mappedBy="voter")
 	public Set<Log> getLogSet() {
 		return logSet;
 	}

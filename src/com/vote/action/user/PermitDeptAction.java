@@ -1,7 +1,6 @@
 package com.vote.action.user;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.opensymphony.xwork2.ActionSupport;
 import com.vote.domain.Dept;
 import com.vote.domain.Log;
+import com.vote.domain.Votee;
 import com.vote.domain.Voter;
 import com.vote.dto.PageModel;
 import com.vote.dto.Pager;
@@ -28,13 +28,14 @@ public class PermitDeptAction extends ActionSupport implements SessionAware {
 	private int pageSize;
 	private Map<String, Object> session;
 	private Voter onlineUser;
-	private PageModel<Voter> userPM;
+	private PageModel<Votee> voteePM;
 	private UserService userService;
 	private Pager pager;	
 	private int deptId;
 	private Set<Log> logSet;
+	private Dept dept;
 	/**
-	 * 获得部门内部投票名单
+	 * 获得投票名单
 	 * @return
 	 */
 	public String getPermitDeptNamePM() {
@@ -53,7 +54,8 @@ public class PermitDeptAction extends ActionSupport implements SessionAware {
 		}
 		if(result) {
 			// 具有投票权限
-			userPM = userService.getPermitDeptNamePM(this.getPager().getOffset(), this.getPageSize(), deptId);
+			dept = userService.getDeptById(deptId);
+			voteePM = userService.getPermitDeptNamePM(this.getPager().getOffset(), this.getPageSize(), deptId);
 			logSet = voter.getLogSet();
 			return SUCCESS;
 		}else {
@@ -107,17 +109,17 @@ public class PermitDeptAction extends ActionSupport implements SessionAware {
 	public Voter getOnlineUser() {
 		return onlineUser;
 	}
-
-	public PageModel<Voter> getUserPM() {
-		return userPM;
+	public PageModel<Votee> getVoteePM() {
+		return voteePM;
 	}
-
-	public void setUserPM(PageModel<Voter> userPM) {
-		this.userPM = userPM;
+	public void setVoteePM(PageModel<Votee> voteePM) {
+		this.voteePM = voteePM;
 	}
-
 	public Set<Log> getLogSet() {
 		return logSet;
+	}
+	public Dept getDept() {
+		return dept;
 	}
 	
 }

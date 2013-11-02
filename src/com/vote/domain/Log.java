@@ -21,7 +21,7 @@ public class Log {
 	// 选举人，投票人，选民
 	private Voter voter; 
 	// 被投票人
-	private Voter votee;
+	private Votee votee;
 	private Date createTime;
 
 	@Id
@@ -54,11 +54,11 @@ public class Log {
 	}
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="voteeId")
-	public Voter getVotee() {
+	public Votee getVotee() {
 		return votee;
 	}
 
-	public void setVotee(Voter votee) {
+	public void setVotee(Votee votee) {
 		this.votee = votee;
 	}
 

@@ -22,9 +22,9 @@ public class Votee {
 
 	private int id;
 	private int year;
-	private int username;
+	private String username;
 	private int isLeaderShip;
-	private int report;
+	private String report;
 	
 	private Set<Dept> belongDeptSet = new HashSet<Dept>();
 	private Set<Log> logSet = new HashSet<Log>();
@@ -43,10 +43,10 @@ public class Votee {
 	public void setYear(int year) {
 		this.year = year;
 	}
-	public int getUsername() {
+	public String getUsername() {
 		return username;
 	}
-	public void setUsername(int username) {
+	public void setUsername(String username) {
 		this.username = username;
 	}
 	public int getIsLeaderShip() {
@@ -55,10 +55,10 @@ public class Votee {
 	public void setIsLeaderShip(int isLeaderShip) {
 		this.isLeaderShip = isLeaderShip;
 	}
-	public int getReport() {
+	public String getReport() {
 		return report;
 	}
-	public void setReport(int report) {
+	public void setReport(String report) {
 		this.report = report;
 	}
 	@ManyToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL)

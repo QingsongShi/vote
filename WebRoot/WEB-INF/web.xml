@@ -9,7 +9,7 @@
 	</welcome-file-list>
 	<context-param>
 		<param-name>pageSize</param-name>
-		<param-value>10</param-value>
+		<param-value>4</param-value>
 	</context-param>
 	<context-param>
 		<param-name>maxIndexPages</param-name>

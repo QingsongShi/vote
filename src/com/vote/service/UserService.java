@@ -7,13 +7,17 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
+import com.vote.dao.BallotDao;
 import com.vote.dao.DeptDao;
 import com.vote.dao.LogDao;
 import com.vote.dao.VoteSystemDao;
+import com.vote.dao.VoteeDao;
 import com.vote.dao.VoterDao;
 import com.vote.domain.Ballot;
+import com.vote.domain.Dept;
 import com.vote.domain.Log;
 import com.vote.domain.VoteSystem;
+import com.vote.domain.Votee;
 import com.vote.domain.Voter;
 import com.vote.dto.PageModel;
 /**
@@ -27,6 +31,8 @@ public class UserService {
 	private VoterDao voterDao;
 	private VoteSystemDao voteSystemDao;
 	private DeptDao deptDao;
+	private VoteeDao voteeDao;
+	private BallotDao ballotDao; 
 	/**
 	 * 验证用户登录
 	 * @param account
@@ -52,19 +58,19 @@ public class UserService {
 	
 	
 	/**
-	 * 得到部门内部投票名单的分页模型
+	 * 
 	 * @param pageNo
 	 * @param pageSize
 	 * @param deptId
 	 * @return
 	 */
-	public PageModel<Voter> getPermitDeptNamePM(int offset,int pageSize,int deptId) {
-		PageModel<Voter> voterPM = new PageModel<Voter>();
+	public PageModel<Votee> getPermitDeptNamePM(int offset,int pageSize,int deptId) {
+		PageModel<Votee> voteePM = new PageModel<Votee>();
 		int systemYear = voteSystemDao.getVoteSystem().getSystemYear();
-		voterPM.setList(voterDao.getVoterList(offset, pageSize, systemYear,deptId));
-		voterPM.setPageSize(pageSize);
-		voterPM.setTotalRecords(voterDao.countOfVoterList(systemYear,deptId));
-		return voterPM;
+		voteePM.setList(voteeDao.getVoteeList(offset, pageSize, systemYear, deptId));
+		voteePM.setPageSize(pageSize);
+		voteePM.setTotalRecords(voteeDao.countOfVoteeList(systemYear, deptId));
+		return voteePM;
 	}
 	/**
 	 * 根据用户id获得用户的所有信息
@@ -76,36 +82,41 @@ public class UserService {
 		return voter;
 	}
 	/**
-	 * 添加投票
-	 * @param ballot
-	 * @param log
-	 */
-	public boolean addBallot(Ballot ballot,Log log) {
-//		int systemYear = voteSystemDao.getVoteSystem().getSystemYear();
-//		List<Log> logList = logDao.
-//		Iterator<Log> it = logList.iterator();
-//		while(it.hasNext()) {
-//			Log voterLog = it.next();
-//			if(voterLog.getVotee().getId()==log.getVotee().getId()) {
-//				return false;
-//			}
-//		}
-//		ballot.setYear(systemYear);
-//		log.setYear(systemYear);
-//	  	ballotDao.save(ballot);
-//	  	logDao.saveLog(log);
-	  	return true;
-	}
-	/**
-	 * 查询选民已经投过的人
-	 * @param voterId
+	 * 根据id获得部门信息
+	 * @param deptId
 	 * @return
 	 */
-//	public List<Log> getLogListByVoterId(int voterId) {
-//		int systemYear = systemDao.getVoteSystemConfig().getYear();
-//		List<Log> list = logDao.getLogListByVoterId(voterId, systemYear);
-//		return list;
-//	}
+	public Dept getDeptById(int deptId) {
+		return deptDao.getDeptById(deptId);
+	}
+	/**
+	 * 根据ID获得被投票人的信息
+	 * @param voteeId
+	 * @return
+	 */
+	public Votee getVoteeById(int voteeId) {
+		return voteeDao.getVoteeById(voteeId);
+	}
+	/**
+	 * 添加投票
+	 * @param ballot
+	 * 
+	 */
+	public boolean addBallot(Ballot ballot,Log log) {
+		int systemYear = voteSystemDao.getVoteSystem().getSystemYear();
+		List<Log> logList = logDao.getLogList(systemYear, log.getVoter().getId());
+		Iterator<Log> it = logList.iterator();
+		while(it.hasNext()) {
+			Log voterLog = it.next();
+			if(voterLog.getVotee().getId()==log.getVotee().getId()) {
+				return false;
+			}
+		}
+	  	ballotDao.addBallot(ballot);
+	  	logDao.addLog(log);
+	  	return true;
+	}
+	
 	@Resource(name="logDao")
 	public void setLogDao(LogDao logDao) {
 		this.logDao = logDao;
@@ -121,6 +132,14 @@ public class UserService {
 	@Resource(name="deptDao")
 	public void setDeptDao(DeptDao deptDao) {
 		this.deptDao = deptDao;
+	}
+	@Resource(name="voteeDao")
+	public void setVoteeDao(VoteeDao voteeDao) {
+		this.voteeDao = voteeDao;
+	}
+	@Resource(name="ballotDao")
+	public void setBallotDao(BallotDao ballotDao) {
+		this.ballotDao = ballotDao;
 	}
 	
 	

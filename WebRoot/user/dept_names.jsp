@@ -31,11 +31,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-  	<pg:pager items="${userPM.totalRecords }"
+  	<pg:pager items="${voteePM.totalRecords }"
 		maxIndexPages="${initParam.maxIndexPages }" maxPageItems="${pageSize }"
 		export="pageOffset,currentPageNumber=pageNumber"
 		url="u/permitDeptNameList">
-	<s:if test="null!=userPM.list && !userPM.list.isEmpty()">
+	<s:if test="null!=voteePM.list && !voteePM.list.isEmpty()">
 		<table border="1" width="40%" class="solidTable">
 			<tr>
 				
@@ -43,16 +43,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<td width="40%">部门</td>
 				<td width="20%">操作</td>
 			</tr>
-			<s:iterator value="userPM.list" var="user">
+			<s:iterator value="voteePM.list" var="votee">
 				<tr>
-					<td><s:property value="#user.username"/></td>
-					<td><s:property value="#user.dept.deptName"/></td>
+					<td><s:property value="#votee.username"/></td>
+					<td><s:property value="dept.deptName"/></td>
 					<td>
 						<input type="button" value="投票" 
-							<s:iterator value="logList" var="log">
-								<s:if test="#log.votee.id==#user.id">disabled="disabled" </s:if>
+							<s:iterator value="logSet" var="log">
+								<s:if test="#log.votee.id==#votee.id">disabled="disabled" </s:if>
 							</s:iterator>
-						onclick="goPoll(<s:property value='#user.id'/>)">
+						onclick="goPoll(<s:property value='#votee.id'/>)">
 					</td>
 				</tr>
 			</s:iterator>
